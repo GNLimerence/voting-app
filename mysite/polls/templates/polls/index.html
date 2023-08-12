@@ -1,0 +1,28 @@
+{% extends 'polls/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Available Polls</h3>
+            </div>
+
+            <ul class="list-group">
+    {% if Ques %}
+        {% for item in Ques %}
+            <li class = "list-group-item">
+                <strong>{{item.question_text}}</strong>
+                <span class = "pull-right">
+                    <a href="{% url 'polls:detail' item.id %}" class="btn btn-info btn-xs"><p>Vote</p></a>
+                    <a href="{% url 'polls:result' item.id %}" class="btn btn-default btn-xs"><p>Result</p></a>
+                </span>
+            </li>
+        {% endfor %}
+    {% else %}
+        <h3 style = "color: red;"> No data found </h3>
+    {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

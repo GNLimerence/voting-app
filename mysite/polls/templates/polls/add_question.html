@@ -1,0 +1,50 @@
+{% extends 'polls/base.html' %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Create a new polls</h3>
+            </div>
+                <div class="panel-body">
+                    <form method="post" action="{% url 'polls:add_question' %}">
+                       <div class="row">
+                          <div class="col-lg-12">
+                             <h1>Question</h1>
+                            {% csrf_token %}
+                            {{ question_form.management_form }}
+                            <p>{{ question_form.question_text }}</p>
+                          </div>
+                       </div>
+                        <div id="choice-forms">
+                            <h1>Choice</h1>
+                        {{ choice_form.management_form }}
+                        {% for choice_form in choice_forms %}
+                            <p>{{ choice_form.choice_text}}</p>
+                        {% endfor %}
+                        </div>
+                    <button type="button" id="add-choice" class="btn btn-primary">Add more choice</button><br><br>
+                    <input type="submit" value="Confirm" class="btn btn-danger">
+                    </form>
+                </div>
+        </div>
+    </div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addChoiceButton = document.getElementById('add-choice');
+        const choiceContainer = document.querySelector('#choice-forms');
+
+        let formCount = {{ choice.forms|length }};
+
+        addChoiceButton.addEventListener('click', function() {
+            const newForm = document.createElement('div');
+            newForm.innerHTML = '{% for form in choice_forms %}{{ form.as_p }}{% endfor %}'.replace(/__prefix__/g, formCount);
+            choiceContainer.appendChild(newForm);
+            formCount++;
+        });
+    });
+</script>
+{% endblock %}
